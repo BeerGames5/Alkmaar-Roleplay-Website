@@ -1,7 +1,7 @@
 import express from 'express';
 import { config, hasDiscord, hasStripe } from './config.js';
 import { getStaff, getCommunities, getGuildCounts, getBotInfo } from './discord.js';
-import { getServerStatus } from './fivem.js';
+import { getServerStatus, testAlleBronnen } from './fivem.js';
 import { products } from './shop.js';
 import { createCheckout } from './payments.js';
 
@@ -100,6 +100,22 @@ api.get('/diagnose', async (req, res) => {
         : 'Controleer je token en internetverbinding.',
     });
   }
+});
+
+/** Diagnose voor de serverstatus: welke bron werkt wel en welke niet? */
+api.get('/diagnose-server', async (req, res) => {
+  const bronnen = await testAlleBronnen();
+  const werkend = bronnen.filter((b) => b.gelukt);
+
+  res.json({
+    joinCode: config.fivem.joinCode,
+    werkendeBronnen: werkend.length,
+    advies: werkend.length
+      ? `Gebruikt wordt: ${werkend[0].bron}.`
+      : 'Geen enkele bron reageert. Staat je server aan en is hij zichtbaar op cfx.re/join/' +
+        config.fivem.joinCode + '?',
+    bronnen,
+  });
 });
 
 api.get('/health', (req, res) => {
