@@ -1,6 +1,6 @@
 import express from 'express';
 import { config, hasDiscord, hasStripe } from './config.js';
-import { getStaff, getCommunities, getGuildCounts } from './discord.js';
+import { getStaff, getCommunities, getGuildCounts, getBotInfo } from './discord.js';
 import { getServerStatus } from './fivem.js';
 import { products } from './shop.js';
 import { createCheckout } from './payments.js';
@@ -64,6 +64,41 @@ api.post('/checkout', rateLimit, async (req, res) => {
   } catch (err) {
     console.error('[checkout]', err.message);
     res.status(err.status || 500).json({ error: err.message });
+  }
+});
+
+/**
+ * Diagnose voor de Discord-koppeling. Open /api/diagnose in je browser als het
+ * team leeg blijft: je ziet dan welke bot je token is en in welke servers hij zit.
+ */
+api.get('/diagnose', async (req, res) => {
+  if (!hasDiscord) {
+    return res.json({
+      probleem: 'DISCORD_BOT_TOKEN of DISCORD_GUILD_ID is niet ingevuld.',
+    });
+  }
+
+  try {
+    const info = await getBotInfo();
+    const ingesteld = config.discord.guildId;
+    const klopt = info.guilds.some((g) => g.id === ingesteld);
+
+    res.json({
+      tokenHoortBijBot: info.bot,
+      ingesteldGuildId: ingesteld,
+      botZitInDieServer: klopt,
+      advies: klopt
+        ? 'Alles klopt. Blijft het team leeg, zet dan Server Members Intent aan in het Developer Portal.'
+        : 'Deze bot zit NIET in die server. Neem het juiste ID over uit de lijst hieronder, of nodig deze bot alsnog uit in je hoofdserver.',
+      serversWaarDezeBotInZit: info.guilds,
+    });
+  } catch (err) {
+    res.status(500).json({
+      probleem: err.message,
+      advies: err.message.includes('401')
+        ? 'Het token wordt niet geaccepteerd. Reset het in het Developer Portal en neem het opnieuw over.'
+        : 'Controleer je token en internetverbinding.',
+    });
   }
 });
 

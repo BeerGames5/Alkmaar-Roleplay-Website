@@ -158,3 +158,20 @@ export async function sendOrderWebhook(embed) {
     console.error('[discord] webhook mislukt:', err.message);
   }
 }
+
+/**
+ * Diagnose: wie is deze bot, en in welke servers zit hij?
+ * Handig als je een "Unknown Guild" ziet — dan klopt het server-ID niet
+ * of hoort het token bij een andere applicatie dan je hebt uitgenodigd.
+ */
+export async function getBotInfo() {
+  const [bot, guilds] = await Promise.all([
+    discordApi('/users/@me'),
+    discordApi('/users/@me/guilds'),
+  ]);
+
+  return {
+    bot: `${bot.username} (ID ${bot.id})`,
+    guilds: guilds.map((g) => ({ id: g.id, naam: g.name })),
+  };
+}

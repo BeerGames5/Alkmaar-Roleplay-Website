@@ -34,8 +34,8 @@ async function viaServer(host) {
   const base = host.startsWith('http') ? host : `http://${host}`;
 
   const [info, players] = await Promise.all([
-    fetch(`${base}/info.json`, { headers: { 'User-Agent': UA }, signal: AbortSignal.timeout(6000) }),
-    fetch(`${base}/players.json`, { headers: { 'User-Agent': UA }, signal: AbortSignal.timeout(6000) }),
+    fetch(`${base}/info.json`, { headers: { 'User-Agent': UA }, signal: AbortSignal.timeout(4000) }),
+    fetch(`${base}/players.json`, { headers: { 'User-Agent': UA }, signal: AbortSignal.timeout(4000) }),
   ]);
 
   if (!info.ok || !players.ok) throw new Error(`server gaf ${info.status}/${players.status}`);
@@ -88,6 +88,13 @@ async function viaCfx(code) {
   };
 }
 
+// Reageert je server niet op poort 30120, dan heeft het geen zin om het elke
+// halve minuut opnieuw te proberen: dat vertraagt alleen de hele pagina.
+// Na drie mislukte pogingen slaan we de directe route vijf minuten over.
+let directeFouten = 0;
+let directeFoutTijd = 0;
+const AFKOELING = 5 * 60 * 1000;
+
 /**
  * Probeert eerst je eigen server (als FIVEM_SERVER_HOST is ingevuld) en valt terug op Cfx.re.
  * Lukt geen van beide, dan tonen we netjes "offline" in plaats van een fout.
@@ -95,12 +102,25 @@ async function viaCfx(code) {
 export async function getServerStatus() {
   return cached('fivem-status', 30 * 1000, async () => {
     const host = config.fivem.host;
+    const afkoelen = directeFouten >= 3 && Date.now() - directeFoutTijd < AFKOELING;
 
-    if (host) {
+    if (host && !afkoelen) {
       try {
-        return await viaServer(host);
+        const status = await viaServer(host);
+        directeFouten = 0;
+        return status;
       } catch (err) {
-        console.error(`[fivem] directe query mislukt (${err.message}), probeer Cfx.re`);
+        directeFouten += 1;
+        directeFoutTijd = Date.now();
+        if (directeFouten === 3) {
+          console.error(
+            `[fivem] ${host} reageert niet op webverkeer. Poort 30120 staat waarschijnlijk` +
+              ' alleen open voor het spel zelf. Ik gebruik voortaan Cfx.re; haal FIVEM_SERVER_HOST' +
+              ' weg om deze melding te stoppen.'
+          );
+        } else {
+          console.error(`[fivem] directe query mislukt (${err.message}), probeer Cfx.re`);
+        }
       }
     }
 
