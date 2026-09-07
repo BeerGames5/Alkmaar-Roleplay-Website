@@ -1,0 +1,274 @@
+<!doctype html>
+<html lang="nl">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Alkmaar Roleplay — serieuze FiveM roleplay in Nederland</title>
+<meta name="description" content="Alkmaar Roleplay is een Nederlandse FiveM-server met serieuze roleplay, whitelisted overheidsdiensten en een levende onderwereld. Bekijk de live serverstatus en sluit je aan.">
+<meta name="theme-color" content="#070c16">
+
+<meta property="og:type" content="website">
+<meta property="og:title" content="Alkmaar Roleplay">
+<meta property="og:description" content="Serieuze Nederlandse FiveM roleplay. Kies je pad: burger, overheidsdienst of onderwereld.">
+<meta property="og:image" content="/banner.jpg">
+
+<link rel="icon" href="/favicon.png" type="image/png">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="preconnect" href="https://cdn.discordapp.com">
+<link href="https://fonts.googleapis.com/css2?family=Barlow:wght@400;500;600;700&family=Cinzel:wght@500;600;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="/style.css">
+</head>
+<body>
+
+<a class="skip" href="#hoofd">Naar de inhoud</a>
+
+<header class="topbar" id="topbar">
+  <div class="wrap topbar-inner">
+    <a class="brand" href="#top">
+      <img src="/alkmaar-roleplay.png" alt="" width="34" height="34">
+      <span>Alkmaar Roleplay</span>
+    </a>
+
+    <nav class="nav" aria-label="Hoofdmenu">
+      <a href="#stad">De stad</a>
+      <a href="#divisies">Divisies</a>
+      <a href="#staff">Team</a>
+      <a href="#winkel">Winkel</a>
+      <a href="#verbinden">Verbinden</a>
+    </nav>
+
+    <a class="btn btn-primary btn-sm" href="https://cfx.re/join/r7yby7" target="_blank" rel="noopener">Speel nu</a>
+
+    <button class="menu-toggle" id="menuToggle" aria-expanded="false" aria-controls="mobileNav" aria-label="Menu openen">
+      <span></span><span></span><span></span>
+    </button>
+  </div>
+  <nav class="mobile-nav" id="mobileNav" aria-label="Menu">
+    <div class="mobile-nav-list">
+      <a href="#stad">De stad</a>
+      <a href="#divisies">Divisies</a>
+      <a href="#staff">Team</a>
+      <a href="#winkel">Winkel</a>
+      <a href="#verbinden">Verbinden</a>
+      <a class="mobile-cta" href="https://cfx.re/join/r7yby7" target="_blank" rel="noopener">Speel nu</a>
+    </div>
+  </nav>
+</header>
+
+<main id="hoofd">
+
+<section class="hero" id="top">
+  <div class="hero-bg" aria-hidden="true"></div>
+  <div class="wrap hero-inner">
+    <img class="hero-mark" id="heroMark" src="/alkmaar-roleplay.png"
+         data-animated="/alkmaar-roleplay-anim.webp"
+         alt="Logo van Alkmaar Roleplay" width="300" height="300" fetchpriority="high" decoding="async">
+    <h1 class="hero-title">Alkmaar<span>Roleplay</span></h1>
+    <p class="hero-lead">
+      Een Nederlandse stad die doordraait terwijl je offline bent. Ga werken, bouw een bedrijf op,
+      trek een uniform aan of verdwijn juist in het circuit dat liever geen uniform ziet.
+    </p>
+    <div class="hero-actions">
+      <a class="btn btn-primary" href="https://cfx.re/join/r7yby7" target="_blank" rel="noopener">Verbind met de server</a>
+      <a class="btn btn-ghost" href="https://discord.gg/ms6ESz9K4D" target="_blank" rel="noopener">Kom in de Discord</a>
+    </div>
+  </div>
+
+  <div class="wrap">
+    <div class="status-rail" id="statusRail" aria-live="polite">
+      <div class="status-cell">
+        <span class="status-key">Server</span>
+        <span class="status-val"><span class="dot dot-wait" id="dotState"></span><span id="serverState">verbinden…</span></span>
+      </div>
+      <div class="status-cell">
+        <span class="status-key">Spelers in de stad</span>
+        <span class="status-val" id="playerCount">—</span>
+      </div>
+      <div class="status-cell">
+        <span class="status-key">Wachtrij</span>
+        <span class="status-val" id="queueCount">—</span>
+      </div>
+      <div class="status-cell">
+        <span class="status-key">Leden op Discord</span>
+        <span class="status-val" id="discordCount">—</span>
+      </div>
+      <div class="status-cell status-cell-code">
+        <span class="status-key">Directe verbinding</span>
+        <code>cfx.re/join/r7yby7</code>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="section" id="stad">
+  <div class="wrap">
+    <div class="section-head">
+      <h2>Wat voor stad is dit?</h2>
+      <p>Vier vaste regels bepalen hoe het hier speelt. Niets ingewikkelds, wel streng.</p>
+    </div>
+
+    <div class="pillars">
+      <article class="pillar">
+        <h3>Je karakter blijft je karakter</h3>
+        <p>Wat er in het spel gebeurt, blijft in het spel. Geen metagaming, geen kennis uit een stream of een
+          Discord-kanaal die je personage nooit had kunnen hebben.</p>
+      </article>
+      <article class="pillar">
+        <h3>Waarde van het leven</h3>
+        <p>Er wordt niet geschoten omdat het kan. Een overval, een ruzie of een achtervolging heeft altijd een
+          aanleiding en altijd gevolgen.</p>
+      </article>
+      <article class="pillar">
+        <h3>Diensten zijn whitelisted</h3>
+        <p>Politie, ambulance en overige overheidsdiensten draaien op sollicitatie en training. Je krijgt een uniform
+          nadat je hebt laten zien dat je ermee om kunt gaan.</p>
+      </article>
+      <article class="pillar">
+        <h3>De economie is echt</h3>
+        <p>Geld verdien je met werk, handel of risico. Wat je koopt, kun je ook kwijtraken. Daardoor betekent bezit
+          hier iets.</p>
+      </article>
+    </div>
+  </div>
+</section>
+
+<section class="section section-divisies" id="divisies">
+  <div class="wrap">
+    <div class="section-head">
+      <h2>Vier Discords, één stad</h2>
+      <p>Elke kant van Alkmaar heeft zijn eigen server. De hoofdserver is verplicht, de rest kies je zelf.</p>
+    </div>
+
+    <div class="divisies" id="divisies-grid">
+      <a class="divisie" data-key="roleplay" href="https://discord.gg/ms6ESz9K4D" target="_blank" rel="noopener">
+        <img src="/alkmaar-roleplay.png" alt="" width="120" height="120" loading="lazy">
+        <h3>Alkmaar Roleplay</h3>
+        <p>De hoofdserver. Aankondigingen, regels, whitelist en de mensen die hier elke avond rondrijden.</p>
+        <span class="divisie-meta" data-count="roleplay">Discord openen</span>
+      </a>
+
+      <a class="divisie" data-key="overheid" href="https://discord.gg/4zsn53BpUE" target="_blank" rel="noopener">
+        <img src="/alkmaar-overheid.png" alt="" width="120" height="120" loading="lazy">
+        <h3>Overheidsdiensten</h3>
+        <p>Politie, ambulance en de rest van de diensten. Sollicitaties, trainingen en dienstroosters.</p>
+        <span class="divisie-meta" data-count="overheid">Discord openen</span>
+      </a>
+
+      <a class="divisie" data-key="onderwereld" href="https://discord.gg/nDGrpubhFB" target="_blank" rel="noopener">
+        <img src="/alkmaar-onderwereld.png" alt="" width="120" height="120" loading="lazy">
+        <h3>Onderwereld</h3>
+        <p>Bendes, families en alles wat zich beter niet laat zien. Aanmelden gaat in overleg.</p>
+        <span class="divisie-meta" data-count="onderwereld">Discord openen</span>
+      </a>
+
+      <a class="divisie" data-key="support" href="https://discord.gg/KG6KcAR7Ym" target="_blank" rel="noopener">
+        <img src="/alkmaar-support.png" alt="" width="120" height="120" loading="lazy">
+        <h3>Support</h3>
+        <p>Vastgelopen, iets kwijt of een melding over een speler? Open hier een ticket bij de staff.</p>
+        <span class="divisie-meta" data-count="support">Discord openen</span>
+      </a>
+    </div>
+  </div>
+</section>
+
+<section class="section" id="staff">
+  <div class="wrap">
+    <div class="section-head">
+      <h2>Het team achter Alkmaar</h2>
+      <p>Rechtstreeks uit Discord. Wie daar een staffrol krijgt, staat hier automatisch bij.</p>
+    </div>
+    <div id="staffContent" class="staff-loading">Team wordt geladen…</div>
+  </div>
+</section>
+
+<section class="section section-winkel" id="winkel">
+  <div class="wrap">
+    <div class="section-head">
+      <h2>Winkel</h2>
+      <p>Alles wat je hier koopt houdt de server draaiend. Betalen kan met iDEAL, Bancontact of kaart.</p>
+    </div>
+    <div id="shopContent" class="shop-loading">Winkel wordt geladen…</div>
+    <p class="shop-note">
+      Na je betaling krijg je een bevestiging per e-mail en meldt onze bot de bestelling bij de staff.
+      Meestal staat alles binnen 24 uur op je account. Klopt er iets niet?
+      <a href="https://discord.gg/KG6KcAR7Ym" target="_blank" rel="noopener">Open een ticket in Support</a>.
+    </p>
+  </div>
+</section>
+
+<section class="section" id="verbinden">
+  <div class="wrap">
+    <div class="section-head">
+      <h2>Zo kom je binnen</h2>
+      <p>Vier stappen, ongeveer tien minuten als je FiveM al hebt staan.</p>
+    </div>
+
+    <ol class="steps">
+      <li>
+        <h3>Installeer FiveM</h3>
+        <p>Je hebt een legale kopie van GTA V nodig op Steam, Epic of Rockstar. Download daarna FiveM via
+          <a href="https://fivem.net" target="_blank" rel="noopener">fivem.net</a> en start het spel één keer op.</p>
+      </li>
+      <li>
+        <h3>Sluit je aan bij de Discord</h3>
+        <p>Lees de regels in de hoofdserver en koppel je Discord-account. Zonder Discord kunnen we je niet helpen
+          als er iets misgaat in het spel.</p>
+      </li>
+      <li>
+        <h3>Verbind met de stad</h3>
+        <p>Open <code>cfx.re/join/r7yby7</code> in je browser of typ <code>connect r7yby7</code> in de FiveM-console
+          (F8). Je kunt de server ook opzoeken op naam.</p>
+      </li>
+      <li>
+        <h3>Maak je karakter</h3>
+        <p>Kies een naam, een verleden en een reden om in Alkmaar te zijn. Speel dat karakter, ook als het even
+          tegenzit. Dat is de hele lol.</p>
+      </li>
+    </ol>
+
+    <div class="connect-box">
+      <div>
+        <h3>Rechtstreeks verbinden</h3>
+        <code class="connect-code">cfx.re/join/r7yby7</code>
+      </div>
+      <div class="connect-actions">
+        <button class="btn btn-ghost" id="copyBtn" data-copy="cfx.re/join/r7yby7">Kopieer adres</button>
+        <a class="btn btn-primary" href="fivem://connect/r7yby7">Open in FiveM</a>
+      </div>
+    </div>
+  </div>
+</section>
+
+</main>
+
+<footer class="footer">
+  <div class="wrap footer-inner">
+    <div class="footer-brand">
+      <img src="/alkmaar-roleplay.png" alt="" width="44" height="44">
+      <p>Alkmaar Roleplay — een Nederlandse FiveM-community.<br>Geen onderdeel van of goedgekeurd door Rockstar Games of Take-Two Interactive.</p>
+    </div>
+    <div class="footer-links">
+      <h4>Discord</h4>
+      <a href="https://discord.gg/ms6ESz9K4D" target="_blank" rel="noopener">Alkmaar Roleplay</a>
+      <a href="https://discord.gg/4zsn53BpUE" target="_blank" rel="noopener">Overheidsdiensten</a>
+      <a href="https://discord.gg/nDGrpubhFB" target="_blank" rel="noopener">Onderwereld</a>
+      <a href="https://discord.gg/KG6KcAR7Ym" target="_blank" rel="noopener">Support</a>
+    </div>
+    <div class="footer-links">
+      <h4>Spelen</h4>
+      <a href="https://cfx.re/join/r7yby7" target="_blank" rel="noopener">Verbind met de server</a>
+      <a href="https://fivem.net" target="_blank" rel="noopener">FiveM downloaden</a>
+      <a href="#winkel">Winkel</a>
+      <a href="#staff">Team</a>
+    </div>
+  </div>
+  <div class="wrap footer-bottom">
+    <span>&copy; <span id="jaar">2026</span> Alkmaar Roleplay</span>
+    <span id="footerStatus"></span>
+  </div>
+</footer>
+
+<script src="/app.js" defer></script>
+</body>
+</html>
