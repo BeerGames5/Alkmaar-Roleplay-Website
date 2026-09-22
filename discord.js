@@ -145,20 +145,6 @@ export async function getGuildCounts() {
   });
 }
 
-/** Stuurt een bestelling naar een Discord-kanaal via webhook. */
-export async function sendOrderWebhook(embed) {
-  if (!config.discord.orderWebhook) return;
-  try {
-    await fetch(config.discord.orderWebhook, {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ username: 'Alkmaar Webshop', embeds: [embed] }),
-    });
-  } catch (err) {
-    console.error('[discord] webhook mislukt:', err.message);
-  }
-}
-
 /**
  * Diagnose: wie is deze bot, en in welke servers zit hij?
  * Handig als je een "Unknown Guild" ziet — dan klopt het server-ID niet

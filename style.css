@@ -321,7 +321,6 @@ code {
 
 .section { padding: 96px 0; }
 .section-divisies { background: linear-gradient(180deg, transparent, rgba(14, 23, 40, .55), transparent); }
-.section-winkel { background: linear-gradient(180deg, transparent, rgba(14, 23, 40, .55), transparent); }
 
 .section-head { max-width: 62ch; margin-bottom: 46px; }
 .section-head h2 {
@@ -415,7 +414,7 @@ code {
 
 /* ---------- Team ---------- */
 
-.staff-loading, .shop-loading, .empty-state {
+.staff-loading, .empty-state {
   color: var(--muted);
   background: var(--panel);
   border: 1px dashed var(--rule);
@@ -493,110 +492,6 @@ code {
   white-space: nowrap;
   overflow: hidden;
   text-overflow: ellipsis;
-}
-
-/* ---------- Winkel ---------- */
-
-.shop-cats { display: flex; flex-direction: column; gap: 46px; }
-.shop-cat-head {
-  font-family: var(--serif);
-  font-size: 1.15rem;
-  font-weight: 600;
-  letter-spacing: .05em;
-  margin: 0 0 18px;
-  padding-bottom: 12px;
-  border-bottom: 1px solid var(--rule);
-}
-
-.shop-grid {
-  display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
-  gap: 20px;
-}
-
-.product {
-  --accent: var(--roleplay);
-  display: flex;
-  flex-direction: column;
-  background: var(--panel);
-  border: 1px solid var(--rule);
-  border-radius: var(--r-lg);
-  padding: 26px 26px 24px;
-}
-.product[data-accent="overheid"] { --accent: var(--overheid); }
-.product[data-accent="support"] { --accent: var(--support); }
-.product[data-accent="onderwereld"] { --accent: var(--onderwereld); }
-.product.featured {
-  border-color: color-mix(in srgb, var(--accent) 50%, var(--rule));
-  background: linear-gradient(180deg, var(--panel-2), var(--panel));
-}
-
-.product-top {
-  display: flex;
-  align-items: baseline;
-  justify-content: space-between;
-  gap: 14px;
-  margin-bottom: 6px;
-}
-.product h4 {
-  font-size: 1.12rem;
-  font-weight: 600;
-  margin: 0;
-}
-.product-price {
-  font-family: var(--serif);
-  font-size: 1.3rem;
-  font-weight: 600;
-  color: var(--accent);
-  white-space: nowrap;
-}
-.product-interval { color: var(--dim); font-size: .82rem; font-weight: 500; }
-.product p { color: var(--muted); font-size: .95rem; margin: 0 0 18px; }
-
-.perks { list-style: none; margin: 0 0 22px; padding: 0; display: grid; gap: 8px; }
-.perks li {
-  position: relative;
-  padding-left: 20px;
-  font-size: .92rem;
-  color: var(--ice);
-}
-.perks li::before {
-  content: '';
-  position: absolute;
-  left: 0;
-  top: .62em;
-  width: 8px;
-  height: 8px;
-  border-radius: 2px;
-  background: var(--accent);
-  opacity: .8;
-}
-
-.product .btn { margin-top: auto; width: 100%; }
-
-.badge {
-  display: inline-block;
-  font-size: .74rem;
-  font-weight: 700;
-  letter-spacing: .06em;
-  color: var(--night);
-  background: var(--accent);
-  padding: 3px 9px;
-  border-radius: 999px;
-  margin-bottom: 12px;
-}
-
-.shop-note {
-  margin-top: 34px;
-  color: var(--dim);
-  font-size: .92rem;
-  max-width: 70ch;
-}
-
-.shop-error {
-  margin-top: 14px;
-  color: #ffb4b1;
-  font-size: .92rem;
 }
 
 /* ---------- Stappen ---------- */

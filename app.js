@@ -1,8 +1,5 @@
 /* Dit bestand draait in de BROWSER van de bezoeker, niet op de server.
-   Het haalt de live gegevens op en tekent het team en de winkel. */
-
-const euro = (cents) =>
-  new Intl.NumberFormat('nl-NL', { style: 'currency', currency: 'EUR' }).format(cents / 100);
+   Het haalt de live gegevens op en tekent het team. */
 
 const getJSON = (url) =>
   fetch(url, { headers: { Accept: 'application/json' } }).then((r) => {
@@ -133,106 +130,6 @@ async function laadStaff() {
   }
 }
 
-/* ---------- Winkel ---------- */
-
-function productKaart(p, actief) {
-  const el = document.createElement('article');
-  el.className = `product${p.featured ? ' featured' : ''}`;
-  el.dataset.accent = p.accent || 'roleplay';
-
-  const badge = p.featured ? '<span class="badge">Meest gekozen</span>' : '';
-  const interval = p.interval ? `<span class="product-interval"> ${p.interval}</span>` : '';
-  const perks = (p.perks || []).map((perk) => `<li>${perk}</li>`).join('');
-
-  el.innerHTML = `
-    ${badge}
-    <div class="product-top">
-      <h4>${p.name}</h4>
-      <div class="product-price">${euro(p.price)}${interval}</div>
-    </div>
-    <p>${p.description}</p>
-    <ul class="perks">${perks}</ul>
-    <button class="btn ${p.featured ? 'btn-primary' : 'btn-ghost'}" data-product="${p.id}" ${actief ? '' : 'disabled'}>
-      ${actief ? 'Afrekenen' : 'Binnenkort beschikbaar'}
-    </button>`;
-
-  return el;
-}
-
-async function laadWinkel() {
-  const doel = document.getElementById('shopContent');
-
-  try {
-    const data = await getJSON('/api/shop');
-    doel.className = 'shop-cats';
-    doel.textContent = '';
-
-    const categorieen = [...new Set(data.products.map((p) => p.category))];
-
-    for (const categorie of categorieen) {
-      const kop = document.createElement('h3');
-      kop.className = 'shop-cat-head';
-      kop.textContent = categorie;
-
-      const grid = document.createElement('div');
-      grid.className = 'shop-grid';
-      for (const p of data.products.filter((p) => p.category === categorie)) {
-        grid.append(productKaart(p, data.enabled));
-      }
-
-      const blok = document.createElement('div');
-      blok.append(kop, grid);
-      doel.append(blok);
-    }
-
-    if (!data.enabled) {
-      const melding = document.createElement('p');
-      melding.className = 'shop-error';
-      melding.textContent =
-        'Betalingen staan nog uit. Zet STRIPE_SECRET_KEY in de omgevingsvariabelen om de winkel te openen.';
-      doel.append(melding);
-    }
-
-    doel.addEventListener('click', afrekenen);
-  } catch (err) {
-    doel.className = 'empty-state';
-    doel.innerHTML = '<h3>Winkel kon niet geladen worden</h3><p>Ververs de pagina of probeer het later opnieuw.</p>';
-    console.error(err);
-  }
-}
-
-async function afrekenen(event) {
-  const knop = event.target.closest('[data-product]');
-  if (!knop) return;
-
-  const origineel = knop.textContent;
-  knop.disabled = true;
-  knop.textContent = 'Bezig…';
-
-  try {
-    const res = await fetch('/api/checkout', {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ productId: knop.dataset.product }),
-    });
-    const data = await res.json();
-
-    if (!res.ok || !data.url) throw new Error(data.error || 'Afrekenen mislukt');
-    window.location.href = data.url;
-  } catch (err) {
-    knop.disabled = false;
-    knop.textContent = origineel;
-
-    let melding = knop.parentElement.querySelector('.shop-error');
-    if (!melding) {
-      melding = document.createElement('p');
-      melding.className = 'shop-error';
-      knop.parentElement.append(melding);
-    }
-    melding.textContent = `Afrekenen lukte niet: ${err.message}. Probeer het opnieuw of open een ticket in Support.`;
-  }
-}
-
 /* ---------- Menu, kopieerknop en scroll ---------- */
 
 function initUI() {
@@ -307,6 +204,5 @@ function initUI() {
 initUI();
 laadStatus();
 laadStaff();
-laadWinkel();
 laadCommunities();
 setInterval(laadStatus, 45000);

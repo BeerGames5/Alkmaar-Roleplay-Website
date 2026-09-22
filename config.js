@@ -36,7 +36,6 @@ export const config = {
     token: process.env.DISCORD_BOT_TOKEN || '',
     guildId: process.env.DISCORD_GUILD_ID || '',
     staffRoles: parseStaffRoles(process.env.DISCORD_STAFF_ROLES),
-    orderWebhook: process.env.DISCORD_ORDER_WEBHOOK || '',
     // Uitnodigingen van de vier community-servers (code achter discord.gg/)
     invites: [
       { key: 'roleplay', code: 'ms6ESz9K4D' },
@@ -53,17 +52,6 @@ export const config = {
     // Is dit ingevuld, dan wordt de status daar opgehaald (sneller en betrouwbaarder).
     host: (process.env.FIVEM_SERVER_HOST || '').trim(),
   },
-
-  stripe: {
-    secretKey: process.env.STRIPE_SECRET_KEY || '',
-    webhookSecret: process.env.STRIPE_WEBHOOK_SECRET || '',
-    // Zet payment methods die je in het Stripe dashboard hebt aangezet.
-    paymentMethods: (process.env.STRIPE_PAYMENT_METHODS || 'card,ideal,bancontact')
-      .split(',')
-      .map((m) => m.trim())
-      .filter(Boolean),
-  },
 };
 
 export const hasDiscord = Boolean(config.discord.token && config.discord.guildId);
-export const hasStripe = Boolean(config.stripe.secretKey);

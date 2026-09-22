@@ -5,38 +5,14 @@ import { fileURLToPath } from 'node:url';
 import express from 'express';
 import compression from 'compression';
 
-import { config, hasDiscord, hasStripe } from './config.js';
+import { config, hasDiscord } from './config.js';
 import { api } from './routes.js';
-import { stripe, handleStripeEvent } from './payments.js';
 
 const MAP = path.dirname(fileURLToPath(import.meta.url));
 const app = express();
 
 app.set('trust proxy', 1);
 app.disable('x-powered-by');
-
-/**
- * De Stripe-webhook moet de ruwe body hebben om de handtekening te controleren,
- * dus die staat bewust voor express.json().
- */
-app.post('/api/stripe/webhook', express.raw({ type: 'application/json' }), async (req, res) => {
-  if (!stripe || !config.stripe.webhookSecret) return res.status(503).end();
-
-  let event;
-  try {
-    event = stripe.webhooks.constructEvent(
-      req.body,
-      req.headers['stripe-signature'],
-      config.stripe.webhookSecret
-    );
-  } catch (err) {
-    console.error('[stripe] ongeldige handtekening:', err.message);
-    return res.status(400).send(`Webhook Error: ${err.message}`);
-  }
-
-  res.json({ received: true });
-  handleStripeEvent(event).catch((err) => console.error('[stripe]', err.message));
-});
 
 app.use(compression());
 app.use(express.json({ limit: '10kb' }));
@@ -58,7 +34,6 @@ app.use('/api', api);
  */
 const PUBLIEKE_BESTANDEN = new Set([
   'index.html',
-  'bedankt.html',
   '404.html',
   'style.css',
   'app.js',
@@ -109,6 +84,5 @@ app.listen(config.port, () => {
   console.log(`Alkmaar Roleplay draait op poort ${config.port}`);
   console.log(`  Discord-koppeling : ${hasDiscord ? 'aan' : 'uit (zet DISCORD_BOT_TOKEN en DISCORD_GUILD_ID)'}`);
   console.log(`  Staffrollen       : ${config.discord.staffRoles.length}`);
-  console.log(`  Betalingen        : ${hasStripe ? 'aan' : 'uit (zet STRIPE_SECRET_KEY)'}`);
   console.log(`  FiveM join-code   : ${config.fivem.joinCode}`);
 });

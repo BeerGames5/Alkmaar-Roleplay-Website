@@ -5,15 +5,13 @@ Website voor de FiveM-server **Alkmaar Roleplay**, met:
 - live serverstatus (spelers, wachtrij, online/offline) via de Cfx.re-API
 - teampagina die automatisch uit Discord komt, met avatar en naam per staflid
 - ledenaantallen van de vier Discord-servers
-- webshop met iDEAL, Bancontact en creditcard via Stripe
-- melding van elke bestelling in een Discord-kanaal
 
 Draait als één Node.js-applicatie. Geen database nodig.
 
 Alle bestanden staan in deze ene map. De server-bestanden (`server.js`, `config.js`, `discord.js`,
-`fivem.js`, `shop.js`, `payments.js`, `routes.js`, `cache.js`) draaien op de server en zijn voor
-bezoekers niet opvraagbaar. Wat de bezoeker wél krijgt, staat in de lijst `PUBLIEKE_BESTANDEN`
-onderaan `server.js`: de drie html-pagina's, `style.css`, `app.js` en de afbeeldingen.
+`fivem.js`, `routes.js`, `cache.js`) draaien op de server en zijn voor bezoekers niet opvraagbaar.
+Wat de bezoeker wél krijgt, staat in de lijst `PUBLIEKE_BESTANDEN` onderaan `server.js`: de
+html-pagina's, `style.css`, `app.js` en de afbeeldingen.
 
 **Voeg je een afbeelding of pagina toe, zet de bestandsnaam dan in die lijst.** Doe je dat niet,
 dan krijg je een 404 — dat is geen fout, dat is de beveiliging die zijn werk doet.
@@ -30,8 +28,8 @@ cp .env.example .env     # Windows: copy .env.example .env
 npm run dev
 ```
 
-Open http://localhost:3000. De site werkt meteen; het team en de winkel blijven leeg tot je de
-stappen hieronder doorloopt.
+Open http://localhost:3000. De site werkt meteen; het team blijft leeg tot je de stappen hieronder
+doorloopt.
 
 ---
 
@@ -109,57 +107,7 @@ publiceert (bijvoorbeeld `sets Queue Count "3"`). Doet hij dat niet, dan blijft 
 
 ---
 
-## 4. Winkel en betalingen (Stripe)
-
-Stripe is de eenvoudigste manier om iDEAL, Bancontact en kaartbetalingen te accepteren. Mollie kan
-ook, maar dan moet je `payments.js` aanpassen.
-
-1. Maak een account op https://dashboard.stripe.com en vul je bedrijfsgegevens in.
-2. Ga naar **Instellingen → Betaalmethoden** en zet **iDEAL** en **Bancontact** aan.
-   Doe je dat niet, haal ze dan uit `STRIPE_PAYMENT_METHODS`, anders faalt het afrekenen.
-3. Ga naar **Developers → API keys** en kopieer de **Secret key** (`sk_live_...` of `sk_test_...`)
-   naar `STRIPE_SECRET_KEY`.
-4. Ga naar **Developers → Webhooks → Add endpoint**:
-   - URL: `https://jouwdomein.nl/api/stripe/webhook`
-   - Event: `checkout.session.completed`
-   - Kopieer de **Signing secret** (`whsec_...`) naar `STRIPE_WEBHOOK_SECRET`.
-
-Test eerst met de testsleutels en kaartnummer `4242 4242 4242 4242`, elke toekomstige datum en
-willekeurige CVC.
-
-### Producten aanpassen
-
-Alles staat in **`shop.js`**. Prijzen in centen (`999` = € 9,99):
-
-```js
-{
-  id: 'vip-zilver',          // uniek, wordt meegestuurd naar Stripe en Discord
-  name: 'VIP Zilver',
-  category: 'Lidmaatschap',  // kopjes in de winkel worden hieruit gemaakt
-  price: 999,
-  interval: 'per maand',     // laat weg voor eenmalige aankopen
-  description: '…',
-  perks: ['…', '…'],
-  accent: 'roleplay',        // roleplay | overheid | support | onderwereld
-  featured: true             // geeft de kaart nadruk
-}
-```
-
-Bij het afrekenen vraagt Stripe om de Discord-naam en de naam van het karakter, zodat je weet wie
-wat moet krijgen.
-
-> **Let op:** dit zijn eenmalige betalingen, ook bij "per maand". Wil je echte automatische
-> incasso, maak dan Prices aan in Stripe en zet `mode: 'subscription'` in `payments.js`.
-
-### Bestellingen in Discord
-
-Maak in je stafkanaal een webhook (**Kanaalinstellingen → Integraties → Webhooks → Nieuwe
-webhook**), kopieer de URL naar `DISCORD_ORDER_WEBHOOK`. Bij elke geslaagde betaling komt daar een
-bericht met pakket, bedrag, Discord-naam, karakternaam en e-mailadres.
-
----
-
-## 5. Op GitHub zetten
+## 4. Op GitHub zetten
 
 ```bash
 git init
@@ -175,7 +123,7 @@ repo is binnen enkele minuten misbruikt.
 
 ---
 
-## 6. Op Render zetten
+## 5. Op Render zetten
 
 1. Ga naar https://dashboard.render.com → **New → Web Service**.
 2. Koppel je GitHub-account en kies deze repository.
@@ -192,14 +140,11 @@ repo is binnen enkele minuten misbruikt.
    | `DISCORD_BOT_TOKEN` | je bot-token |
    | `DISCORD_GUILD_ID` | ID van de hoofdserver |
    | `DISCORD_STAFF_ROLES` | `rolID:Naam:kleur,…` |
-   | `DISCORD_ORDER_WEBHOOK` | webhook-URL (optioneel) |
-   | `STRIPE_SECRET_KEY` | `sk_live_…` (optioneel) |
-   | `STRIPE_WEBHOOK_SECRET` | `whsec_…` (optioneel) |
 
 5. **Create Web Service**. De eerste build duurt een paar minuten.
 
-Controleer daarna `https://jouw-service.onrender.com/api/health`. Je ziet dan of Discord en Stripe
-herkend zijn en hoeveel staffrollen zijn ingelezen.
+Controleer daarna `https://jouw-service.onrender.com/api/health`. Je ziet dan of Discord herkend is
+en hoeveel staffrollen zijn ingelezen.
 
 **Over het gratis pakket:** een gratis Render-service gaat na 15 minuten zonder bezoek in slaap. De
 eerste bezoeker daarna wacht ongeveer 30 seconden. Voor een serieuze community is het betaalde
@@ -208,18 +153,16 @@ Starter-pakket (\$7 per maand) de moeite waard — dan blijft de site altijd wak
 ### Eigen domein
 
 Onder **Settings → Custom Domains** voeg je bijvoorbeeld `alkmaarroleplay.nl` toe. Render laat zien
-welke DNS-records je bij je domeinaanbieder moet zetten. Vergeet daarna niet `SITE_URL` bij te
-werken, anders sturen de betaallinks je naar het oude adres.
+welke DNS-records je bij je domeinaanbieder moet zetten.
 
 ---
 
-## 7. Onderhoud
+## 6. Onderhoud
 
 | Wat | Waar |
 |---|---|
 | Teksten en secties | `index.html` |
 | Kleuren, lettertypes, opmaak | `style.css` |
-| Producten en prijzen | `shop.js` |
 | Discord-uitnodigingen | `config.js` (`invites`) |
 | Welke bestanden bezoekers mogen zien | `server.js` (`PUBLIEKE_BESTANDEN`) |
 | Wat er in de browser gebeurt | `app.js` |
@@ -237,6 +180,3 @@ aanstaat en of de bot echt lid is van de server.
 **De serverstatus zegt Offline terwijl de server draait.** Zoek je server op
 https://servers.fivem.net. Staat hij daar niet, dan is `sv_master1` uitgeschakeld in je
 `server.cfg`.
-
-**Afrekenen geeft een foutmelding.** Meestal is dat een betaalmethode die nog niet aanstaat in
-Stripe. Zet `STRIPE_PAYMENT_METHODS=card` en probeer het opnieuw.
