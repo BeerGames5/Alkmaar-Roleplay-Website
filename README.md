@@ -45,7 +45,7 @@ De sectie **Webshop** staat in `index.html`; de productgegevens en checkout-flow
 4. Controleer in Tebex dat de package het juiste **FiveM Asset** als deliverable bevat en dat de Cfx.re-integratie/accountkoppeling werkt.
 5. Deploy de wijziging. Open `https://jouw-domein/api/shop/product`: de JSON moet `checkoutEnabled: true` tonen en de packagegegevens bevatten. Ga daarna naar **Webshop** op de website en doe zelf een aankooptest voordat je het publiek aankondigt.
 
-Bij een klik op **Kopen via Tebex** maakt de backend een basket, voegt package-ID `7761862` toe, vraagt de FiveM-accountautorisatie op en stuurt de bezoeker daarna door naar de checkout-link die Tebex terugstuurt. De browser kan de package-ID of prijs niet zelf kiezen. Geen database is nodig voor deze flow; basketgegevens worden door Tebex beheerd.
+Bij een klik op **Kopen via Tebex** maakt de backend een lege basket en vraagt eerst de FiveM/Cfx.re-accountautorisatie op. Pas nadat de koper is teruggekeerd naar `/api/shop/continue`, voegt de backend package-ID `7761862` toe en stuurt de koper door naar de checkout-link die Tebex terugstuurt. Deze volgorde is nodig voor FiveM Asset-packages die vereisen dat de koper is ingelogd vóór het toevoegen aan de basket. De browser kan de package-ID of prijs niet zelf kiezen. Geen database is nodig; basketgegevens worden door Tebex beheerd.
 
 ### Lokaal testen
 

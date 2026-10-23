@@ -42,7 +42,7 @@ api.post('/shop/checkout', async (req, res) => {
   }
 });
 
-/** Callback na autorisatie; haalt de basket-checkoutlink opnieuw op bij Tebex. */
+/** Callback na Cfx/FiveM-autorisatie; voegt daarna pas de asset-package toe en opent Tebex-checkout. */
 api.get('/shop/continue', async (req, res) => {
   try {
     const checkoutUrl = await continueTebexCheckout(String(req.query.basket || ''));

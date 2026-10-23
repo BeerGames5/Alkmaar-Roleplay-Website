@@ -172,13 +172,9 @@ export async function createTebexCheckout(req) {
     throw errorWithStatus('Tebex heeft geen geldig winkelmandje teruggegeven.', 502);
   }
 
-  // Het product wordt geselecteerd op de server; de browser kan geen prijs/product-ID wijzigen.
-  await tebexFetch(`${API_BASE}/baskets/${encodeURIComponent(basketIdent)}/packages`, {
-    method: 'POST',
-    body: JSON.stringify({ package_id: config.tebex.packageId, quantity: 1 }),
-  });
-
-  // Cfx/FiveM-account autoriseren vóór de checkout, nodig voor levering van FiveM Assets.
+  // FiveM Asset-packages vereisen dat de koper eerst is ingelogd via Cfx.re/FiveM.
+  // Voeg het product daarom PAS toe nadat de authenticatiecallback is bereikt.
+  // De browser kan de prijs/product-ID niet zelf wijzigen; de server bepaalt de package.
   const callback = `${site}/api/shop/continue?basket=${encodeURIComponent(basketIdent)}`;
   const authPayload = await tebexFetch(
     accountUrl(`/baskets/${encodeURIComponent(basketIdent)}/auth?returnUrl=${encodeURIComponent(callback)}`),
@@ -208,12 +204,32 @@ export async function continueTebexCheckout(basketIdent) {
     throw errorWithStatus('Dit winkelmandje is ongeldig of verlopen.', 400);
   }
 
-  const response = await tebexFetch(accountUrl(`/baskets/${encodeURIComponent(basketIdent)}`));
-  const basket = unwrap(response);
-  if (!basket?.links?.checkout) {
-    throw errorWithStatus('De Tebex-checkout kon niet worden geopend. Begin opnieuw vanaf de webshop.', 502);
+  // Deze route is de returnUrl uit Tebex' FiveM-auth flow. Op dit punt heeft
+  // de koper zich aangemeld. Alleen nu mag het FiveM Asset-package toegevoegd worden.
+  const basketUrl = accountUrl(`/baskets/${encodeURIComponent(basketIdent)}`);
+  const beforePayload = await tebexFetch(basketUrl);
+  const beforeBasket = unwrap(beforePayload);
+  const packages = Array.isArray(beforeBasket?.packages) ? beforeBasket.packages : [];
+  const alreadyAdded = packages.some((item) => {
+    const possibleIds = [item?.id, item?.package_id, item?.packageId].map(String);
+    return possibleIds.includes(String(config.tebex.packageId));
+  });
+
+  if (!alreadyAdded) {
+    await tebexFetch(`${API_BASE}/baskets/${encodeURIComponent(basketIdent)}/packages`, {
+      method: 'POST',
+      body: JSON.stringify({ package_id: config.tebex.packageId, quantity: 1 }),
+    });
   }
-  return validateTebexUrl(basket.links.checkout, 'checkout.tebex.io', 'checkout');
+
+  // Het toevoegen van een package maakt de checkoutlink beschikbaar; haal de
+  // basket opnieuw op en stuur de koper door naar de door Tebex geretourneerde URL.
+  const afterPayload = await tebexFetch(basketUrl);
+  const afterBasket = unwrap(afterPayload);
+  if (!afterBasket?.links?.checkout) {
+    throw errorWithStatus('De Tebex-checkout kon niet worden geopend. Controleer je FiveM Asset-package in Tebex en begin opnieuw.', 502);
+  }
+  return validateTebexUrl(afterBasket.links.checkout, 'checkout.tebex.io', 'checkout');
 }
 
 export const tebexFallbackProduct = cleanProduct(FALLBACK_PRODUCT);
