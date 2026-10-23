@@ -32,6 +32,12 @@ export const config = {
   port: process.env.PORT || 3000,
   siteUrl: (process.env.SITE_URL || '').replace(/\/$/, ''),
 
+  tebex: {
+    // Gebruik alleen de Public Token van de Tebex Headless API. Nooit een private API-key in de frontend zetten.
+    publicToken: (process.env.TEBEX_PUBLIC_TOKEN || '').trim(),
+    packageIdent: (process.env.TEBEX_PACKAGE_IDENT || 'pkg_3482158_7761862').trim(),
+  },
+
   discord: {
     token: process.env.DISCORD_BOT_TOKEN || '',
     guildId: process.env.DISCORD_GUILD_ID || '',
@@ -55,3 +61,4 @@ export const config = {
 };
 
 export const hasDiscord = Boolean(config.discord.token && config.discord.guildId);
+export const hasTebex = Boolean(config.tebex.publicToken && config.tebex.packageIdent);

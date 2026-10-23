@@ -130,6 +130,109 @@ async function laadStaff() {
   }
 }
 
+
+/* ---------- Tebex-webshop ---------- */
+function tekstUitHtml(value) {
+  const documentFragment = new DOMParser().parseFromString(String(value || ''), 'text/html');
+  return (documentFragment.body.textContent || '').replace(/\s+/g, ' ').trim();
+}
+
+function formatteerPrijs(value, currency) {
+  const amount = Number(value);
+  if (!Number.isFinite(amount) || amount < 0) return 'Prijs in checkout';
+  try {
+    return new Intl.NumberFormat('nl-BE', {
+      style: 'currency',
+      currency: /^[A-Z]{3}$/.test(currency || '') ? currency : 'EUR',
+    }).format(amount);
+  } catch {
+    return `€ ${amount.toFixed(2).replace('.', ',')}`;
+  }
+}
+
+async function laadWebshop() {
+  const knop = document.getElementById('shopBuyButton');
+  const status = document.getElementById('shopStatus');
+  if (!knop || !status) return;
+
+  const naam = document.getElementById('shopProductName');
+  const beschrijving = document.getElementById('shopProductDescription');
+  const afbeelding = document.getElementById('shopProductImage');
+  const prijs = document.getElementById('shopProductPrice');
+  const belasting = document.getElementById('shopProductTax');
+
+  const setStatus = (message, error = false) => {
+    status.textContent = message;
+    status.classList.toggle('is-error', error);
+  };
+
+  try {
+    const response = await getJSON('/api/shop/product');
+    const product = response.product || {};
+
+    naam.textContent = product.name || 'Alkmaar Admin Panel V2';
+    beschrijving.textContent = tekstUitHtml(product.description) || 'FiveM Asset voor je server.';
+    prijs.textContent = formatteerPrijs(product.totalPrice, product.currency);
+    belasting.textContent = Number(product.salesTax) > 0
+      ? 'Totaal volgens Tebex; checkout bevestigt de prijs'
+      : 'De definitieve prijs verschijnt in Tebex';
+
+    if (typeof product.image === 'string') {
+      try {
+        const imageUrl = new URL(product.image);
+        if (imageUrl.protocol === 'https:') {
+          afbeelding.src = imageUrl.href;
+          afbeelding.alt = naam.textContent;
+        }
+      } catch {
+        // Laat de vaste standaardafbeelding staan bij een ongeldige URL.
+      }
+    }
+
+    if (!response.checkoutEnabled) {
+      knop.disabled = true;
+      knop.textContent = 'Checkout nog niet ingesteld';
+      setStatus('De productkaart staat klaar, maar de Tebex Public Token moet nog bij de Environment-variabelen van Render worden ingevuld.');
+      return;
+    }
+
+    knop.disabled = false;
+    knop.textContent = 'Kopen via Tebex';
+    setStatus(response.note || 'Je koppelt eerst je Cfx.re-account en gaat daarna veilig verder naar Tebex.');
+
+    knop.addEventListener('click', async () => {
+      knop.disabled = true;
+      knop.textContent = 'Checkout voorbereiden…';
+      setStatus('We maken je winkelmandje aan en openen de Cfx.re-accountkoppeling.');
+
+      try {
+        const result = await fetch('/api/shop/checkout', {
+          method: 'POST',
+          headers: { Accept: 'application/json' },
+        });
+        const data = await result.json().catch(() => ({}));
+        if (!result.ok) throw new Error(data.error || 'De checkout kon niet gestart worden.');
+
+        let redirect;
+        try { redirect = new URL(data.redirectUrl); } catch { throw new Error('Tebex gaf geen geldige accountkoppeling terug.'); }
+        if (redirect.protocol !== 'https:' || redirect.hostname !== 'ident.tebex.io') {
+          throw new Error('Tebex gaf geen vertrouwde Cfx.re-accountkoppeling terug.');
+        }
+        window.location.assign(redirect.href);
+      } catch (err) {
+        setStatus(err.message || 'Er ging iets mis bij het openen van Tebex. Probeer opnieuw.', true);
+        knop.disabled = false;
+        knop.textContent = 'Opnieuw proberen';
+      }
+    });
+  } catch (err) {
+    knop.disabled = true;
+    knop.textContent = 'Product tijdelijk niet beschikbaar';
+    setStatus('Productgegevens konden niet geladen worden. Ververs de pagina of probeer het later opnieuw.', true);
+    console.error('Tebex-webshop laden mislukt:', err);
+  }
+}
+
 /* ---------- Menu, kopieerknop en scroll ---------- */
 
 function initUI() {
@@ -205,4 +308,5 @@ initUI();
 laadStatus();
 laadStaff();
 laadCommunities();
+laadWebshop();
 setInterval(laadStatus, 45000);

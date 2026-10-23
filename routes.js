@@ -1,9 +1,63 @@
 import express from 'express';
-import { config, hasDiscord } from './config.js';
+import { config, hasDiscord, hasTebex } from './config.js';
 import { getStaff, getCommunities, getGuildCounts, getBotInfo } from './discord.js';
 import { getServerStatus, testAlleBronnen } from './fivem.js';
+import { createTebexCheckout, continueTebexCheckout, getTebexProduct, tebexFallbackProduct } from './tebex.js';
 
 export const api = express.Router();
+
+
+/** Productgegevens voor de eigen webshop. De prijzen worden waar mogelijk live uit Tebex gehaald. */
+api.get('/shop/product', async (req, res) => {
+  try {
+    const result = await getTebexProduct();
+    res.set('Cache-Control', 'public, max-age=30');
+    res.json({ ...result, note: null });
+  } catch (err) {
+    console.warn(`[Tebex] Productgegevens konden niet worden opgehaald: ${err.message}`);
+    // Toon de productkaart nog steeds; Tebex zelf bevestigt de definitieve checkout-prijs.
+    res.set('Cache-Control', 'no-store');
+    res.json({
+      product: tebexFallbackProduct,
+      configured: true,
+      checkoutEnabled: true,
+      note: 'De live productgegevens konden niet worden opgehaald. De definitieve prijs wordt in de Tebex-checkout bevestigd.',
+    });
+  }
+});
+
+/** Maak de Tebex-basket aan en begin met Cfx/FiveM-accountautorisatie. */
+api.post('/shop/checkout', async (req, res) => {
+  try {
+    const redirectUrl = await createTebexCheckout(req);
+    res.set('Cache-Control', 'no-store');
+    res.json({ redirectUrl });
+  } catch (err) {
+    const status = Number.isInteger(err.status) ? err.status : 502;
+    console.error(`[Tebex] Checkout voorbereiden mislukt: ${err.message}`);
+    res.status(status).json({ error: err.message || 'De Tebex-checkout kon niet worden gestart.' });
+  }
+});
+
+/** Callback na autorisatie; haalt de basket-checkoutlink opnieuw op bij Tebex. */
+api.get('/shop/continue', async (req, res) => {
+  try {
+    const checkoutUrl = await continueTebexCheckout(String(req.query.basket || ''));
+    res.set('Cache-Control', 'no-store');
+    res.redirect(303, checkoutUrl);
+  } catch (err) {
+    const status = Number.isInteger(err.status) ? err.status : 502;
+    console.error(`[Tebex] Doorgaan naar checkout mislukt: ${err.message}`);
+    res.status(status).type('html').send(`<!doctype html><html lang="nl"><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>Checkout niet beschikbaar</title><body style="font-family:system-ui;background:#060a12;color:#eaf0fd;max-width:680px;margin:12vh auto;padding:24px;line-height:1.6"><h1>Checkout niet beschikbaar</h1><p>${escapeHtml(err.message || 'De checkout kon niet worden geopend.')}</p><p><a style="color:#7fb6e8" href="/#winkel">Terug naar de webshop</a></p></body></html>`);
+  }
+});
+
+function escapeHtml(value) {
+  return String(value).replace(/[&<>"']/g, (character) => ({
+    '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;',
+  })[character]);
+}
+
 
 api.get('/status', async (req, res) => {
   const [server, discord] = await Promise.all([
@@ -85,6 +139,7 @@ api.get('/health', (req, res) => {
   res.json({
     ok: true,
     discord: hasDiscord,
+    tebex: hasTebex,
     staffRoles: config.discord.staffRoles.length,
     joinCode: config.fivem.joinCode,
   });

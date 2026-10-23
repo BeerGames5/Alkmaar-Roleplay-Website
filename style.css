@@ -494,6 +494,69 @@ code {
   text-overflow: ellipsis;
 }
 
+
+/* ---------- Webshop / Tebex ---------- */
+.shop-products {
+  display: grid;
+  grid-template-columns: minmax(0, 760px);
+  gap: 22px;
+}
+.shop-card {
+  display: grid;
+  grid-template-columns: minmax(220px, .9fr) minmax(0, 1.1fr);
+  overflow: hidden;
+  background: linear-gradient(135deg, var(--panel-2), var(--panel));
+  border: 1px solid var(--rule);
+  border-radius: var(--r-lg);
+  box-shadow: 0 20px 60px -45px rgba(63, 142, 214, .7);
+}
+.shop-product-media {
+  display: grid;
+  place-items: center;
+  min-height: 280px;
+  padding: 26px;
+  background: radial-gradient(ellipse at center, rgba(63, 142, 214, .12), transparent 72%), var(--deep);
+  border-right: 1px solid var(--rule);
+}
+.shop-product-media img {
+  width: 100%;
+  max-height: 320px;
+  object-fit: contain;
+  border-radius: var(--r-md);
+}
+.shop-product-body { padding: 30px; min-width: 0; }
+.shop-kicker {
+  display: inline-flex;
+  align-items: center;
+  gap: 7px;
+  color: var(--roleplay-soft);
+  text-transform: uppercase;
+  letter-spacing: .11em;
+  font-weight: 700;
+  font-size: .72rem;
+}
+.shop-product-body h3 {
+  font-family: var(--serif);
+  font-size: clamp(1.25rem, 2.5vw, 1.65rem);
+  line-height: 1.35;
+  margin: 12px 0 10px;
+}
+.shop-product-description { margin: 0; color: var(--muted); font-size: .98rem; }
+.shop-price-row {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: baseline;
+  gap: 8px 14px;
+  margin: 24px 0 18px;
+}
+.shop-price-row strong { font-size: 1.75rem; line-height: 1.15; font-weight: 700; letter-spacing: -.02em; }
+.shop-price-row span { color: var(--dim); font-size: .82rem; }
+.shop-buy-button { width: 100%; min-height: 46px; }
+.shop-buy-button:disabled { cursor: not-allowed; opacity: .65; transform: none; box-shadow: none; }
+.shop-status { min-height: 1.5em; margin: 12px 0 0; color: var(--muted); font-size: .85rem; overflow-wrap: anywhere; }
+.shop-status.is-error { color: #ff9f9b; }
+.shop-footnote { max-width: 760px; margin: 18px 0 0; color: var(--dim); font-size: .88rem; }
+
 /* ---------- Stappen ---------- */
 
 .steps {
@@ -648,6 +711,10 @@ code {
   .steps li { padding: 22px 22px 22px 64px; }
   .steps li::before { left: 22px; top: 22px; font-size: 1.25rem; }
   .connect-box { flex-direction: column; align-items: flex-start; }
+  .shop-card { grid-template-columns: 1fr; }
+  .shop-product-media { min-height: 190px; max-height: 250px; border-right: 0; border-bottom: 1px solid var(--rule); padding: 20px; }
+  .shop-product-media img { max-height: 210px; }
+  .shop-product-body { padding: 24px; }
 }
 
 @media (prefers-reduced-motion: reduce) {

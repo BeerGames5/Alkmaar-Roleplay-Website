@@ -34,6 +34,7 @@ app.use('/api', api);
  */
 const PUBLIEKE_BESTANDEN = new Set([
   'index.html',
+  'bedankt.html',
   '404.html',
   'style.css',
   'app.js',

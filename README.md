@@ -5,6 +5,8 @@ Website voor de FiveM-server **Alkmaar Roleplay**, met:
 - live serverstatus (spelers, wachtrij, online/offline) via de Cfx.re-API
 - teampagina die automatisch uit Discord komt, met avatar en naam per staflid
 - ledenaantallen van de vier Discord-servers
+- eigen webshop met Tebex Headless API voor **Alkmaar Admin Panel V2**
+- FiveM/Cfx.re-accountautorisatie vóór de Tebex-checkout en automatische assetlevering via de ingestelde Tebex-package
 
 Draait als één Node.js-applicatie. Geen database nodig.
 
@@ -33,9 +35,25 @@ doorloopt.
 
 ---
 
-## 2. Discord koppelen (team + ledenaantallen)
+## 2. Tebex-webshop koppelen
 
-### 2.1 Maak een bot aan
+De sectie **Webshop** staat in `index.html`; de productgegevens en checkout-flow staan in `tebex.js`, `routes.js` en `app.js`.
+
+1. Open de Tebex Creator/Control Panel en ga naar **API Keys**. Kopieer de **Public Token** voor de Headless API. Gebruik hier geen private checkout-API-key.
+2. In het Render-dashboard open je de service → **Environment**. Voeg `TEBEX_PUBLIC_TOKEN` toe met die Public Token.
+3. Controleer dat `TEBEX_PACKAGE_IDENT` deze waarde heeft: `pkg_3482158_7761862`. Dit is de `ident` uit de packages-API voor **Alkmaar Admin Panel V2**. De code gebruikt bewust de `ident` en niet alleen het numerieke ID.
+4. Controleer in Tebex dat de package het juiste **FiveM Asset** als deliverable bevat en dat de Cfx.re-integratie/accountkoppeling werkt.
+5. Deploy de wijziging. Open `https://jouw-domein/api/shop/product`: de JSON moet `checkoutEnabled: true` tonen en de packagegegevens bevatten. Ga daarna naar **Webshop** op de website en doe zelf een aankooptest voordat je het publiek aankondigt.
+
+Bij een klik op **Kopen via Tebex** maakt de backend een basket, voegt de vaste package toe, vraagt de FiveM-accountautorisatie op en stuurt de bezoeker daarna door naar de checkout-link die Tebex terugstuurt. De browser kan de package-ID of prijs niet zelf kiezen. Geen database is nodig voor deze flow; basketgegevens worden door Tebex beheerd.
+
+### Lokaal testen
+
+Kopieer `.env.example` naar `.env` en vul lokaal `TEBEX_PUBLIC_TOKEN` in. Start daarna met `npm install` en `npm run dev`. Laat `.env` lokaal staan en commit dit bestand nooit naar GitHub.
+
+## 3. Discord koppelen (team + ledenaantallen)
+
+### 3.1 Maak een bot aan
 
 1. Ga naar https://discord.com/developers/applications en klik **New Application**. Noem hem
    bijvoorbeeld *Alkmaar Website*.
@@ -46,21 +64,21 @@ doorloopt.
    **SERVER MEMBERS INTENT** aan. Sla op.
    Zonder dit kan de bot je ledenlijst niet ophalen en blijft de teampagina leeg.
 
-### 2.2 Nodig de bot uit in je server
+### 3.2 Nodig de bot uit in je server
 
 1. Ga naar **OAuth2 → URL Generator**.
 2. Vink bij *Scopes* aan: `bot`.
 3. Bij *Bot Permissions* is **View Channels** genoeg. Meer heeft hij niet nodig.
 4. Open de gegenereerde link en voeg de bot toe aan **Alkmaar Roleplay** (de hoofdserver).
 
-### 2.3 Zoek de ID's op
+### 3.3 Zoek de ID's op
 
 Zet eerst de ontwikkelaarsmodus aan in Discord: **Instellingen → Geavanceerd → Ontwikkelaarsmodus**.
 
 - **Server-ID**: rechtermuisknop op de servernaam → *Server-ID kopiëren*. Dit is `DISCORD_GUILD_ID`.
 - **Rol-ID's**: **Serverinstellingen → Rollen**, rechtermuisknop op een rol → *Rol-ID kopiëren*.
 
-### 2.4 Stel de staffrollen in
+### 3.4 Stel de staffrollen in
 
 `DISCORD_STAFF_ROLES` bepaalt welke rollen op de site komen, in welke volgorde en met welke kleur:
 
@@ -86,7 +104,7 @@ kwijtraakt, verdwijnt automatisch. Je hoeft niets handmatig bij te houden.
 
 ---
 
-## 3. Serverstatus
+## 4. Serverstatus
 
 `FIVEM_JOIN_CODE=r7yby7` — dat is het stuk achter `cfx.re/join/`.
 
@@ -107,7 +125,7 @@ publiceert (bijvoorbeeld `sets Queue Count "3"`). Doet hij dat niet, dan blijft 
 
 ---
 
-## 4. Op GitHub zetten
+## 5. Op GitHub zetten
 
 ```bash
 git init
@@ -123,7 +141,7 @@ repo is binnen enkele minuten misbruikt.
 
 ---
 
-## 5. Op Render zetten
+## 6. Op Render zetten
 
 1. Ga naar https://dashboard.render.com → **New → Web Service**.
 2. Koppel je GitHub-account en kies deze repository.
@@ -157,12 +175,13 @@ welke DNS-records je bij je domeinaanbieder moet zetten.
 
 ---
 
-## 6. Onderhoud
+## 7. Onderhoud
 
 | Wat | Waar |
 |---|---|
 | Teksten en secties | `index.html` |
 | Kleuren, lettertypes, opmaak | `style.css` |
+| Tebex package en checkout-flow | `tebex.js`, `routes.js`, `app.js` |
 | Discord-uitnodigingen | `config.js` (`invites`) |
 | Welke bestanden bezoekers mogen zien | `server.js` (`PUBLIEKE_BESTANDEN`) |
 | Wat er in de browser gebeurt | `app.js` |
