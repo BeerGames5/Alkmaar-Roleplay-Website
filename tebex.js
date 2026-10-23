@@ -175,7 +175,7 @@ export async function createTebexCheckout(req) {
   // Het product wordt geselecteerd op de server; de browser kan geen prijs/product-ID wijzigen.
   await tebexFetch(`${API_BASE}/baskets/${encodeURIComponent(basketIdent)}/packages`, {
     method: 'POST',
-    body: JSON.stringify({ package_id: config.tebex.packageIdent, quantity: 1 }),
+    body: JSON.stringify({ package_id: config.tebex.packageId, quantity: 1 }),
   });
 
   // Cfx/FiveM-account autoriseren vóór de checkout, nodig voor levering van FiveM Assets.

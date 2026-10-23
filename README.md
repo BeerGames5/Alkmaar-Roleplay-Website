@@ -41,11 +41,11 @@ De sectie **Webshop** staat in `index.html`; de productgegevens en checkout-flow
 
 1. Open de Tebex Creator/Control Panel en ga naar **API Keys**. Kopieer de **Public Token** voor de Headless API. Gebruik hier geen private checkout-API-key.
 2. In het Render-dashboard open je de service → **Environment**. Voeg `TEBEX_PUBLIC_TOKEN` toe met die Public Token.
-3. Controleer dat `TEBEX_PACKAGE_IDENT` deze waarde heeft: `pkg_3482158_7761862`. Dit is de `ident` uit de packages-API voor **Alkmaar Admin Panel V2**. De code gebruikt bewust de `ident` en niet alleen het numerieke ID.
+3. Stel beide packagegegevens in: `TEBEX_PACKAGE_IDENT=pkg_3482158_7761862` (ident om het product op te zoeken) en `TEBEX_PACKAGE_ID=7761862` (numerieke ID die Tebex vereist bij het toevoegen aan een basket).
 4. Controleer in Tebex dat de package het juiste **FiveM Asset** als deliverable bevat en dat de Cfx.re-integratie/accountkoppeling werkt.
 5. Deploy de wijziging. Open `https://jouw-domein/api/shop/product`: de JSON moet `checkoutEnabled: true` tonen en de packagegegevens bevatten. Ga daarna naar **Webshop** op de website en doe zelf een aankooptest voordat je het publiek aankondigt.
 
-Bij een klik op **Kopen via Tebex** maakt de backend een basket, voegt de vaste package toe, vraagt de FiveM-accountautorisatie op en stuurt de bezoeker daarna door naar de checkout-link die Tebex terugstuurt. De browser kan de package-ID of prijs niet zelf kiezen. Geen database is nodig voor deze flow; basketgegevens worden door Tebex beheerd.
+Bij een klik op **Kopen via Tebex** maakt de backend een basket, voegt package-ID `7761862` toe, vraagt de FiveM-accountautorisatie op en stuurt de bezoeker daarna door naar de checkout-link die Tebex terugstuurt. De browser kan de package-ID of prijs niet zelf kiezen. Geen database is nodig voor deze flow; basketgegevens worden door Tebex beheerd.
 
 ### Lokaal testen
 
@@ -143,30 +143,23 @@ repo is binnen enkele minuten misbruikt.
 
 ## 6. Op Render zetten
 
-1. Ga naar https://dashboard.render.com → **New → Web Service**.
-2. Koppel je GitHub-account en kies deze repository.
-3. Render leest `render.yaml` en vult het meeste zelf in. Controleer:
-   - **Runtime**: Node
+1. Zorg dat `package.json`, `server.js`, `render.yaml` en de overige projectbestanden op de GitHub-repository staan. Als de map `Alkmaar-Roleplay-Website-main` zelf binnen de repository staat, kies die map als **Root Directory** of verplaats de inhoud naar de repository-root.
+2. Ga naar https://dashboard.render.com.
+3. Je kunt **New → Blueprint** gebruiken om de instellingen uit `render.yaml` automatisch toe te passen. Verbind de repository, controleer dat de Blueprint Path `render.yaml` is en volg de prompts voor `TEBEX_PUBLIC_TOKEN`. Als je liever **New → Web Service** kiest, stel de waarden handmatig in zoals hieronder.
+4. Gebruik bij handmatige setup:
+   - **Runtime/Language**: Node
+   - **Branch**: `main` (of de branch waarop je website staat)
+   - **Root Directory**: leeg als `package.json` direct in de repository-root staat; anders de map die `package.json` bevat
    - **Build Command**: `npm ci`
    - **Start Command**: `npm start`
-   - **Region**: Frankfurt (dichtstbij voor Nederlandse bezoekers)
-4. Klik op **Environment** en voeg toe:
+   - **Region**: Frankfurt
+   - **Plan**: Free of een betaald plan naar keuze
+   - **Health Check Path** (onder Advanced): `/api/health`
+5. Nadat de service is aangemaakt, open **Environment → Add from .env** en importeer het meegeleverde Render-env-bestand. Klik daarna op **Save, rebuild, and deploy**. Render biedt bulk-import van geldige `.env`-bestanden aan.
+6. Discord-teamgegevens en een direct FiveM-serveradres zijn optioneel. Vul later bij **Environment** `DISCORD_BOT_TOKEN`, `DISCORD_GUILD_ID`, `DISCORD_STAFF_ROLES` en/of `FIVEM_SERVER_HOST` in als je die functies wilt activeren.
+7. `SITE_URL` is niet vereist: de backend gebruikt de hostnaam waarmee de bezoeker de checkout start, dus ook je custom domein.
 
-   | Variabele | Waarde |
-   |---|---|
-   | `SITE_URL` | `https://jouw-service.onrender.com` |
-   | `DISCORD_BOT_TOKEN` | je bot-token |
-   | `DISCORD_GUILD_ID` | ID van de hoofdserver |
-   | `DISCORD_STAFF_ROLES` | `rolID:Naam:kleur,…` |
-
-5. **Create Web Service**. De eerste build duurt een paar minuten.
-
-Controleer daarna `https://jouw-service.onrender.com/api/health`. Je ziet dan of Discord herkend is
-en hoeveel staffrollen zijn ingelezen.
-
-**Over het gratis pakket:** een gratis Render-service gaat na 15 minuten zonder bezoek in slaap. De
-eerste bezoeker daarna wacht ongeveer 30 seconden. Voor een serieuze community is het betaalde
-Starter-pakket (\$7 per maand) de moeite waard — dan blijft de site altijd wakker.
+Controleer na de deploy `https://jouw-service.onrender.com/api/health`. De JSON moet `ok: true` en `tebex: true` tonen. Open daarna `https://jouw-service.onrender.com/api/shop/product`: daar moeten de gegevens van **Alkmaar Admin Panel V2** staan.
 
 ### Eigen domein
 

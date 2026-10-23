@@ -10,21 +10,12 @@ services:
     autoDeploy: true
     envVars:
       - key: NODE_VERSION
-        value: 20.11.1
+        value: "24.21.0"
       - key: FIVEM_JOIN_CODE
         value: r7yby7
-      - key: FIVEM_SERVER_HOST
-        sync: false
-      # De onderstaande waarden vul je in het Render-dashboard in.
-      - key: SITE_URL
-        sync: false
       - key: TEBEX_PUBLIC_TOKEN
         sync: false
       - key: TEBEX_PACKAGE_IDENT
         value: pkg_3482158_7761862
-      - key: DISCORD_BOT_TOKEN
-        sync: false
-      - key: DISCORD_GUILD_ID
-        sync: false
-      - key: DISCORD_STAFF_ROLES
-        sync: false
+      - key: TEBEX_PACKAGE_ID
+        value: "7761862"

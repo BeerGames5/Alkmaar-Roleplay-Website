@@ -19,9 +19,12 @@ api.get('/shop/product', async (req, res) => {
     res.set('Cache-Control', 'no-store');
     res.json({
       product: tebexFallbackProduct,
-      configured: true,
-      checkoutEnabled: true,
-      note: 'De live productgegevens konden niet worden opgehaald. De definitieve prijs wordt in de Tebex-checkout bevestigd.',
+      configured: hasTebex,
+      // Do not present a working buy button unless the live package lookup succeeded.
+      checkoutEnabled: false,
+      note: hasTebex
+        ? 'Tebex kon het product nu niet controleren. De aankoopknop blijft uit veiligheid tijdelijk uitgeschakeld; probeer later opnieuw.'
+        : 'Vul de Tebex Public Token in bij de Environment-variabelen van Render om de checkout te activeren.',
     });
   }
 });
