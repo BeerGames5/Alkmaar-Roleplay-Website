@@ -229,7 +229,7 @@ export async function continueTebexCheckout(basketIdent) {
   if (!afterBasket?.links?.checkout) {
     throw errorWithStatus('De Tebex-checkout kon niet worden geopend. Controleer je FiveM Asset-package in Tebex en begin opnieuw.', 502);
   }
-  return validateTebexUrl(afterBasket.links.checkout, 'checkout.tebex.io', 'checkout');
+  return validateTebexUrl(afterBasket.links.checkout, 'pay.tebex.io', 'checkout');
 }
 
 export const tebexFallbackProduct = cleanProduct(FALLBACK_PRODUCT);
