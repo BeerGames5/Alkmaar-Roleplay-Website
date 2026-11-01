@@ -62,6 +62,7 @@
           <button class="btn btn-primary btn-lg" data-buy>Buy now <span class="price-tag" data-price>€49.99</span></button>
           <a class="btn btn-ghost btn-lg" href="#demo">Try the demo</a>
         </div>
+        <div class="hero-sale"><span class="save" data-price-off></span><span class="was-line">was <s data-price-was></s></span></div>
       </div>
     </div>
     <div class="hero-shot fade-up" style="--d:.3s"><div class="pm-frame" id="heroPanel"></div></div>
@@ -281,7 +282,8 @@
           <img class="price-img" src="assets/img/logo.webp" alt="">
           <div><h3 data-pkg-name>Alkmaar Admin Panel</h3><div class="sub">In-game and browser · one FiveM server</div></div>
         </div>
-        <div class="price"><b data-price>€49.99</b><span>one-time</span></div>
+        <div class="price"><b data-price>€49.99</b><s class="was" data-price-was></s><span>one-time</span></div>
+        <div class="save" data-price-off></div>
         <div class="price-note">The final price, including any VAT, is shown at checkout.</div>
         <ul class="incl">
           <li><span data-icon="check"></span>In-game and browser panel</li>
