@@ -1,33 +1,41 @@
-<!doctype html>
-<html lang="nl">
+<!DOCTYPE html>
+<html lang="en">
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>Bedankt — Alkmaar Roleplay</title>
+<title>Thank you — Alkmaar Admin Panel</title>
 <meta name="robots" content="noindex">
-<link rel="icon" href="/favicon.png" type="image/png">
-<link rel="preconnect" href="https://fonts.googleapis.com">
-<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Barlow:wght@400;500;600;700&family=Cinzel:wght@500;600;700&display=swap" rel="stylesheet">
-<link rel="stylesheet" href="/style.css">
+<meta name="theme-color" content="#0a0a0b">
+<link rel="icon" type="image/png" href="assets/img/favicon.png">
+<link rel="stylesheet" href="assets/css/site.css">
 </head>
 <body>
-<main class="page-narrow">
-  <div class="wrap inner">
-    <img src="/alkmaar-support.png" alt="" width="110" height="110">
-    <h1>Betaling gelukt</h1>
-    <p>
-      Tebex verwerkt je bestelling. Bij een FiveM Asset wordt de levering gekoppeld aan het Cfx.re-account
-      dat je tijdens het afrekenen hebt geautoriseerd. Controleer dus of je het juiste account hebt gebruikt.
-    </p>
-    <p>
-      Zie je de asset niet na een afgeronde betaling? Open een ticket in de Support-server en vermeld je Tebex-bestelreferentie.
-    </p>
-    <div class="hero-actions">
-      <a class="btn btn-primary" href="/">Terug naar de site</a>
-      <a class="btn btn-ghost" href="https://discord.gg/KG6KcAR7Ym" target="_blank" rel="noopener">Ticket openen</a>
+<header class="nav scrolled" id="nav">
+  <div class="wrap nav-in">
+    <a class="logo" href="./" aria-label="Alkmaar Creator home"><img src="assets/img/logo.webp" alt="" width="26" height="26"><span>Alkmaar <small>Creator</small></span></a>
+    <div class="nav-cta"><a class="btn btn-ghost btn-sm" href="https://discord.gg/DEJxkyrn5U" target="_blank" rel="noopener">Discord</a></div>
+  </div>
+</header>
+<main class="thanks">
+  <div class="wrap thanks-wrap">
+    <div class="check fade-up"><svg viewBox="0 0 24 24"><path d="M5 12.5l4.5 4.5L19 7.5"/></svg></div>
+    <span class="label fade-up" style="--d:.1s">Payment complete</span>
+    <h1 class="h1 fade-up" style="--d:.15s;font-size:clamp(34px,5vw,52px)">Thanks for your purchase.</h1>
+    <p class="lead fade-up" style="--d:.25s;margin:16px 0 0">Tebex has emailed your receipt. Here is how to get the panel running.</p>
+    <div class="next-steps">
+      <div class="how-step fade-up" style="--d:.3s"><span class="n">1</span><div><h4>Download it from Keymaster</h4><p>Open <a href="https://keymaster.fivem.net/asset-grants" target="_blank" rel="noopener">Keymaster → Granted assets</a> with the Cfx.re account you used at checkout.</p></div></div>
+      <div class="how-step fade-up" style="--d:.35s"><span class="n">2</span><div><h4>Add it to your server</h4><p>Put <code>arp-adminpanel</code> in your resources and add <code>ensure arp-adminpanel</code> after <code>ox_lib</code> and <code>oxmysql</code>.</p></div></div>
+      <div class="how-step fade-up" style="--d:.4s"><span class="n">3</span><div><h4>Set your licence</h4><p>Put your licence key or Tebex transaction ID in <code>server.cfg</code>: <code>set arp_panel_license "tbx-…"</code></p></div></div>
+      <div class="how-step fade-up" style="--d:.45s"><span class="n">4</span><div><h4>Open your panel</h4><p>Restart, type <code>panellink</code> in the console and create your first browser login.</p></div></div>
+    </div>
+    <div class="hero-ctas fade-up" style="--d:.5s">
+      <a class="btn btn-primary btn-lg" href="https://beergames5.github.io/Alkmaar-Adminpanel-Documentation/" target="_blank" rel="noopener">Read the documentation</a>
+      <a class="btn btn-ghost btn-lg" href="https://discord.gg/DEJxkyrn5U" target="_blank" rel="noopener">Get support on Discord</a>
     </div>
   </div>
 </main>
+<script src="assets/js/icons.js"></script>
+<script src="assets/js/panel.js"></script>
+<script src="assets/js/site.js"></script>
 </body>
 </html>
