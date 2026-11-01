@@ -3,16 +3,95 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>Alkmaar Admin Panel · FiveM admin panel for in-game and browser</title>
-<meta name="description" content="Manage your entire FiveM server from one modern panel, in-game and in your browser. Players, tickets, bans, economy, a live 3D map and GameView. ESX, QBCore and Qbox.">
+<title>FiveM Admin Panel for ESX, QBCore &amp; Qbox · In-game + Web | Alkmaar Creator</title>
+<meta name="description" content="FiveM admin panel and admin menu for ESX, QBCore and Qbox. Manage players, tickets, bans, logs and economy in-game and in your browser, with a live 3D map and GameView. No hosting or ports needed.">
+<link rel="canonical" href="https://alkmaarcreator.com/">
+<meta name="robots" content="index, follow, max-image-preview:large">
 <meta name="theme-color" content="#0a0a0b">
 <link rel="icon" type="image/png" href="assets/img/favicon.png">
 <link rel="apple-touch-icon" href="assets/img/apple-touch-icon.png">
 <meta property="og:type" content="website">
-<meta property="og:title" content="Alkmaar Admin Panel — In-game & browser">
-<meta property="og:description" content="Manage your entire FiveM server from one modern panel. In-game and in your browser.">
+<meta property="og:site_name" content="Alkmaar Creator">
+<meta property="og:url" content="https://alkmaarcreator.com/">
+<meta property="og:title" content="FiveM Admin Panel for ESX, QBCore & Qbox · In-game + Web">
+<meta property="og:description" content="Manage your entire FiveM server from one modern admin panel, in-game and in your browser. Players, tickets, bans, economy, a live 3D map and GameView.">
 <meta property="og:image" content="https://alkmaarcreator.com/assets/img/og.jpg">
+<meta property="og:image:width" content="1200">
+<meta property="og:image:height" content="675">
+<meta property="og:image:alt" content="Alkmaar Admin Panel for FiveM">
+<meta property="og:locale" content="en_US">
 <meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:title" content="FiveM Admin Panel for ESX, QBCore & Qbox · In-game + Web">
+<meta name="twitter:description" content="Manage your entire FiveM server from one modern admin panel, in-game and in your browser.">
+<meta name="twitter:image" content="https://alkmaarcreator.com/assets/img/og.jpg">
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@graph": [
+    {
+      "@type": "Organization",
+      "@id": "https://alkmaarcreator.com/#org",
+      "name": "Alkmaar Creator",
+      "url": "https://alkmaarcreator.com/",
+      "logo": "https://alkmaarcreator.com/assets/img/logo.webp",
+      "email": "Alkmaar.Creator.Info@gmail.com",
+      "sameAs": [
+        "https://discord.gg/DEJxkyrn5U",
+        "https://alkmaar-creator.tebex.store/",
+        "https://docs.alkmaarcreator.com/"
+      ]
+    },
+    {
+      "@type": "WebSite",
+      "@id": "https://alkmaarcreator.com/#website",
+      "url": "https://alkmaarcreator.com/",
+      "name": "Alkmaar Creator",
+      "publisher": {"@id": "https://alkmaarcreator.com/#org"},
+      "inLanguage": "en"
+    },
+    {
+      "@type": "SoftwareApplication",
+      "@id": "https://alkmaarcreator.com/#product",
+      "name": "Alkmaar Admin Panel",
+      "alternateName": ["ARP Admin Panel", "arp-adminpanel"],
+      "description": "FiveM admin panel and admin menu for ESX, QBCore and Qbox servers. Manage players, tickets, bans, logs and economy in-game and in your browser, with a live 3D map and GameView.",
+      "applicationCategory": "GameApplication",
+      "operatingSystem": "FiveM (ESX, QBCore, Qbox)",
+      "url": "https://alkmaarcreator.com/",
+      "image": "https://alkmaarcreator.com/assets/img/og.jpg",
+      "screenshot": [
+        "https://alkmaarcreator.com/assets/shots/dashboard.webp",
+        "https://alkmaarcreator.com/assets/shots/player-profile.webp",
+        "https://alkmaarcreator.com/assets/shots/tickets.webp",
+        "https://alkmaarcreator.com/assets/shots/map-3d.webp"
+      ],
+      "inLanguage": ["en", "nl", "de", "fr", "es"],
+      "publisher": {"@id": "https://alkmaarcreator.com/#org"},
+      "offers": {
+        "@type": "Offer",
+        "price": "49.99",
+        "priceCurrency": "EUR",
+        "availability": "https://schema.org/InStock",
+        "url": "https://alkmaarcreator.com/#pricing",
+        "seller": {"@id": "https://alkmaarcreator.com/#org"}
+      }
+    },
+    {
+      "@type": "FAQPage",
+      "@id": "https://alkmaarcreator.com/#faq",
+      "mainEntity": [
+        {"@type": "Question", "name": "Which frameworks does it support?", "acceptedAnswer": {"@type": "Answer", "text": "ESX, QBCore and Qbox. It needs ox_lib and oxmysql, which most servers already run. Inventories are supported through a bridge you can edit yourself."}},
+        {"@type": "Question", "name": "Do I need to host anything or open ports?", "acceptedAnswer": {"@type": "Answer", "text": "No. Your server connects out to our cloud over HTTPS on port 443 and you get a private panel link. It also works on hosts that block traffic to the game port."}},
+        {"@type": "Question", "name": "How do I get it after buying?", "acceptedAnswer": {"@type": "Answer", "text": "You log in with your Cfx.re account before paying. After payment the resource is added to your account in Keymaster. Add it to your server, set your licence and type panellink in the console."}},
+        {"@type": "Question", "name": "Can I use it on more than one server?", "acceptedAnswer": {"@type": "Answer", "text": "One licence runs on one FiveM server at a time. Moving to another host or reinstalling is free: contact us and we release the binding."}},
+        {"@type": "Question", "name": "Can my staff use it on their phone?", "acceptedAnswer": {"@type": "Answer", "text": "Yes. The browser panel works in any modern browser, so staff can check tickets, logs and players from anywhere."}},
+        {"@type": "Question", "name": "Can I change how it looks?", "acceptedAnswer": {"@type": "Answer", "text": "Choose from Black, Blue, Red and Light themes, any accent colour, density, corner style and text size, and set the window size and opacity in-game."}},
+        {"@type": "Question", "name": "What about refunds?", "acceptedAnswer": {"@type": "Answer", "text": "Purchases are final once the licence has been issued and used. If it does not work on a supported setup and we cannot fix it within 30 days, contact us and we will refund you."}}
+      ]
+    }
+  ]
+}
+</script>
 <link rel="preload" href="assets/fonts/inter.woff2" as="font" type="font/woff2" crossorigin>
 <link rel="stylesheet" href="assets/css/site.css?v=20261101">
 <link rel="stylesheet" href="assets/css/panel.css?v=20261101">
