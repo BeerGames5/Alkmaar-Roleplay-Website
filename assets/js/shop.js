@@ -51,7 +51,16 @@
     try {
       const p = await call(account(`/packages/${TEBEX.packageId}`));
       const price = Number(p.total_price ?? p.base_price);
-      if (Number.isFinite(price) && p.currency) document.querySelectorAll('[data-price]').forEach((el) => { el.textContent = money(price, p.currency); });
+      const off = Number(p.discount) || 0;
+      if (Number.isFinite(price) && p.currency) {
+        document.querySelectorAll('[data-price]').forEach((el) => { el.textContent = money(price, p.currency); });
+        if (off > 0) {
+          const was = price + off;
+          document.querySelectorAll('[data-price-was]').forEach((el) => { el.textContent = money(was, p.currency); });
+          document.querySelectorAll('[data-price-off]').forEach((el) => { el.textContent = `Save ${money(off, p.currency)}`; });
+          document.documentElement.classList.add('on-sale');
+        }
+      }
       if (p.name) document.querySelectorAll('[data-pkg-name]').forEach((el) => { el.textContent = String(p.name).split('|')[0].trim(); });
       if (p.image) {
         try { const u = safeUrl(p.image, ['cloudfront.net', 'tebex.io']); document.querySelectorAll('[data-pkg-img]').forEach((el) => { el.src = u; }); } catch {}
